@@ -61,15 +61,15 @@ app.MapPost("/games", (Game game) =>
 app.MapPut("/games/{id:int}", (int id, Game updatedGame) =>
 {
     var existingGame = games.Find(game => game.Id == id);
-    
+
     if (existingGame is null) return Results.NotFound();
-    
+
     existingGame.Name = updatedGame.Name;
-    existingGame.Genre = updatedGame.Genre; 
+    existingGame.Genre = updatedGame.Genre;
     existingGame.ReleaseDate = updatedGame.ReleaseDate;
-    existingGame.Price = updatedGame.Price; 
+    existingGame.Price = updatedGame.Price;
     existingGame.ImageUrl = updatedGame.ImageUrl;
-    
+
     return Results.NoContent();
 });
 
@@ -78,7 +78,7 @@ app.MapDelete("/games/{id:int}", (int id) =>
     var existingGame = games.Find(game => game.Id == id);
     if (existingGame is null) return Results.NotFound();
     games.Remove(existingGame);
-    
+
     return Results.NoContent();
 });
 
