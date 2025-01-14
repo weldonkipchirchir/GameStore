@@ -38,7 +38,8 @@ List<Game> games =
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-var group = app.MapGroup("/games");
+var group = app.MapGroup("/games")
+    .WithParameterValidation();
 
 app.MapGet("/", () => "!");
 
