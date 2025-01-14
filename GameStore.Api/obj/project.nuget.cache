@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "lLaKFNd/hSY=",
+  "dgSpecHash": "Qh2EHrgyubM=",
   "success": true,
   "projectFilePath": "C:\\Users\\weldo\\personal\\GameStore\\GameStore.Api\\GameStore.Api.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\weldo\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\weldo\\.nuget\\packages\\minimalapis.extensions\\0.11.0\\minimalapis.extensions.0.11.0.nupkg.sha512",
+    "C:\\Users\\weldo\\.nuget\\packages\\minivalidation\\0.8.0\\minivalidation.0.8.0.nupkg.sha512"
+  ],
   "logs": []
 }
