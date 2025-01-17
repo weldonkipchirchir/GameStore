@@ -2,7 +2,7 @@ using GameStore.Api.Entities;
 
 namespace GameStore.Api.Repositories;
 
-public class InMemGameRepository
+public class InMemGameRepository : IGameRepository
 {
     private readonly List<Game?> games =
     [
@@ -36,9 +36,9 @@ public class InMemGameRepository
             ImageUrl = "https://placehold.co/100"
         }
     ];
-    
+
     public IEnumerable<Game?> GetGames() => games;
-    
+
     public Game? GetGame(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(id);
@@ -49,28 +49,28 @@ public class InMemGameRepository
     {
         game.Id = games.Max(game1 => game1?.Id ?? 0) + 1;
         games.Add(game);
-    }  
-    
+    }
+
     public void UpdateGame(int id, Game updatedGame)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(id);
-        
+
         var existingGame = games.Find(game => game != null && game.Id == id);
         if (existingGame is null) return;
-        
+
         existingGame.Name = updatedGame.Name;
         existingGame.Genre = updatedGame.Genre;
         existingGame.ReleaseDate = updatedGame.ReleaseDate;
         existingGame.Price = updatedGame.Price;
         existingGame.ImageUrl = updatedGame.ImageUrl;
     }
-    
+
     public void DeleteGame(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(id);
-        
+
         var existingGame = games.FindIndex(game => game != null && game.Id == id);
-        if (existingGame == -1) return;        
+        if (existingGame == -1) return;
         games.RemoveAt(existingGame);
     }
 }
