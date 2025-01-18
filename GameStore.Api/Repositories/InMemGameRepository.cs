@@ -12,7 +12,7 @@ public class InMemGameRepository : IGameRepository
             Name = "Street Fighter II",
             Genre = "Fighting",
             Price = 19.99M,
-            ReleaseDate = new DateTime(1991, 02, 01),
+            ReleaseDate = new DateTime(1991, 02, 01, 0, 0, 0, DateTimeKind.Utc),
             ImageUrl = "https://placehold.co/100"
         },
 
@@ -22,7 +22,7 @@ public class InMemGameRepository : IGameRepository
             Name = "Final Fantasy XIV",
             Genre = "RolePlaying",
             Price = 59.99M,
-            ReleaseDate = new DateTime(2010, 09, 30),
+            ReleaseDate = new DateTime(2010, 09, 30, 0, 0, 0, DateTimeKind.Utc),
             ImageUrl = "https://placehold.co/100"
         },
 
@@ -32,7 +32,7 @@ public class InMemGameRepository : IGameRepository
             Name = "FIFA 23",
             Genre = "Sports",
             Price = 69.99M,
-            ReleaseDate = new DateTime(2022, 09, 27),
+            ReleaseDate = new DateTime(2022, 09, 27, 0, 0, 0, DateTimeKind.Utc),
             ImageUrl = "https://placehold.co/100"
         }
     ];
