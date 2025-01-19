@@ -17,7 +17,7 @@ public static class GamesEndpoints
             .WithParameterValidation();
 
 
-        group.MapGet("/", (IGameRepository repository) => repository.GetGames().Select(selectGame => selectGame is not null ? selectGame.AsDto() : null));
+        group.MapGet("/", (IGameRepository repository) => repository.GetGames().Select(selectGame => selectGame?.AsDto()));
 
         group.MapGet("/{id:int}", (int id, IGameRepository repository) =>
             {
