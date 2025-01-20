@@ -19,7 +19,7 @@ public class InMemGameRepository : IGameRepository
         new Game()
         {
             Id = 2,
-            Name = "Final Fantasy XIV",
+            Name = "Fantasy XIV",
             Genre = "RolePlaying",
             Price = 59.99M,
             ReleaseDate = new DateTime(2010, 09, 30, 0, 0, 0, DateTimeKind.Utc),
