@@ -53,6 +53,9 @@ public class InMemGameRepository : IGameRepository
 
     public void UpdateGame(int id, Game updatedGame)
     {
+        if(id == null){
+            return;
+        }
         ArgumentOutOfRangeException.ThrowIfNegative(id);
 
         var existingGame = games.Find(game => game != null && game.Id == id);
