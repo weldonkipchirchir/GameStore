@@ -2,7 +2,6 @@ using GameStore.Api.Dtos;
 using GameStore.Api.Entities;
 using GameStore.Api.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GameStore.Api.Endpoints;
 
@@ -15,12 +14,14 @@ public static class GamesEndpoints
         var group = routes.MapGroup("/games")
                           .WithParameterValidation();
 
+        // Get all games
         group.MapGet("/", async (IGameRepository repository) =>
         {
             var games = await repository.GetGamesAsync();
             return games.Select(game => game?.AsDto());
         });
 
+        // Get game by ID
         group.MapGet("/{id:int}", async (int id, IGameRepository repository) =>
         {
             var game = await repository.GetGameAsync(id);
@@ -28,6 +29,7 @@ public static class GamesEndpoints
         })
         .WithName(GetGameEndpoint);
 
+        // Create a new game
         group.MapPost("/", async (CreateGameDto gameDto, IGameRepository repository) =>
         {
             var game = new Game
@@ -44,6 +46,7 @@ public static class GamesEndpoints
             return Results.CreatedAtRoute(GetGameEndpoint, new { id = game.Id }, game.AsDto());
         });
 
+        // Update an existing game
         group.MapPut("/{id:int}", async (int id, UpdateGameDto updatedGameDto, IGameRepository repository) =>
         {
             var game = await repository.GetGameAsync(id);
@@ -60,6 +63,7 @@ public static class GamesEndpoints
             return Results.NoContent();
         });
 
+        // Delete a game
         group.MapDelete("/{id:int}", async (int id, IGameRepository repository) =>
         {
             var game = await repository.GetGameAsync(id);
@@ -71,11 +75,5 @@ public static class GamesEndpoints
         });
 
         return group;
-    }
-
-    private static async Task<IResult> GetGameByIdAsync(int id, IGameRepository repository)
-    {
-        var game = await repository.GetGameAsync(id);
-        return game is null ? Results.NotFound() : Results.Ok(game.AsDto());
     }
 }
