@@ -11,7 +11,7 @@ public record GameDto(
     string ImageUrl
 );
 
-public abstract record CreateGameDto(
+public record CreateGameDto(
     [Required][StringLength(50)] string Name,
     [Required][StringLength(20)] string Genre,
     [Range(1, 100)] decimal Price,
@@ -19,7 +19,7 @@ public abstract record CreateGameDto(
     [Url][StringLength(100)] string ImageUrl
 );
 
-public abstract record UpdateGameDto(
+public record UpdateGameDto(
     [Required][StringLength(50)] string Name,
     [Required][StringLength(20)] string Genre,
     [Range(1, 100)] decimal Price,
