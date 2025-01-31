@@ -27,7 +27,7 @@ public static class GamesEndpoints
             var game = await repository.GetGameAsync(id);
             return game is null ? Results.NotFound() : Results.Ok(game.AsDto());
         })
-        .WithName(GetGameEndpoint);
+        .WithName(GetGameEndpoint).RequireAuthorization();
 
         // Create a new game
         group.MapPost("/", async (CreateGameDto gameDto, IGameRepository repository) =>
@@ -44,7 +44,7 @@ public static class GamesEndpoints
             await repository.CreateGameAsync(game);
 
             return Results.CreatedAtRoute(GetGameEndpoint, new { id = game.Id }, game.AsDto());
-        });
+        }).RequireAuthorization();
 
         // Update an existing game
         group.MapPut("/{id:int}", async (int id, UpdateGameDto updatedGameDto, IGameRepository repository) =>
@@ -61,7 +61,7 @@ public static class GamesEndpoints
             await repository.UpdateGameAsync(id, game);
 
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
 
         // Delete a game
         group.MapDelete("/{id:int}", async (int id, IGameRepository repository) =>
@@ -72,7 +72,7 @@ public static class GamesEndpoints
             await repository.DeleteGameAsync(id);
 
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
 
         return group;
     }
