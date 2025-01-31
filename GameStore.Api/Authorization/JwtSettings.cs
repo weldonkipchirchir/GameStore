@@ -1,4 +1,4 @@
-namespace GameStore.Api.jwt;
+namespace GameStore.Api.Authorization;
 
 public class JwtSettings
 {
