@@ -1,5 +1,6 @@
 using GameStore.Api.Dtos;
 using GameStore.Api.Entities;
+using GameStore.Api.Authorization;
 using GameStore.Api.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -27,7 +28,7 @@ public static class GamesEndpoints
             var game = await repository.GetGameAsync(id);
             return game is null ? Results.NotFound() : Results.Ok(game.AsDto());
         })
-        .WithName(GetGameEndpoint).RequireAuthorization();
+        .WithName(GetGameEndpoint).RequireAuthorization(Policies.ReadAccess);
 
         // Create a new game
         group.MapPost("/", async (CreateGameDto gameDto, IGameRepository repository) =>
@@ -44,7 +45,7 @@ public static class GamesEndpoints
             await repository.CreateGameAsync(game);
 
             return Results.CreatedAtRoute(GetGameEndpoint, new { id = game.Id }, game.AsDto());
-        }).RequireAuthorization();
+        }).RequireAuthorization(Policies.WriteAccess);
 
         // Update an existing game
         group.MapPut("/{id:int}", async (int id, UpdateGameDto updatedGameDto, IGameRepository repository) =>
@@ -61,7 +62,7 @@ public static class GamesEndpoints
             await repository.UpdateGameAsync(id, game);
 
             return Results.NoContent();
-        }).RequireAuthorization();
+        }).RequireAuthorization(Policies.WriteAccess);
 
         // Delete a game
         group.MapDelete("/{id:int}", async (int id, IGameRepository repository) =>
@@ -72,7 +73,7 @@ public static class GamesEndpoints
             await repository.DeleteGameAsync(id);
 
             return Results.NoContent();
-        }).RequireAuthorization();
+        }).RequireAuthorization(Policies.WriteAccess);
 
         return group;
     }
