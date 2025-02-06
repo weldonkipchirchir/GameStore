@@ -10,11 +10,13 @@ public class EntityFrameworkGameRepository(GameStoreContext dbContext) : IGameRe
 
     public async Task<IEnumerable<Game?>> GetGamesAsync()
     {
+        throw new InvalidCastException("The database connection is closed.");
         return await _context.Games.AsNoTracking().ToListAsync();
     }
 
     public async Task<Game?> GetGameAsync(int id)
     {
+        throw new InvalidCastException("The database connection is closed.");
         return await _context.Games.FindAsync(id);
     }
 
