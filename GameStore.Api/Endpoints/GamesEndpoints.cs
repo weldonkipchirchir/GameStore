@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using GameStore.Api.Dtos;
 using GameStore.Api.Entities;
 using GameStore.Api.Authorization;
@@ -16,10 +17,10 @@ public static class GamesEndpoints
                           .WithParameterValidation();
 
         // Get all games
-        group.MapGet("/", async (IGameRepository repository) =>
+        group.MapGet("/", async (IGameRepository repository, ILoggerFactory loggerFactory) =>
         {
-            var games = await repository.GetGamesAsync();
-            return games.Select(game => game?.AsDto());
+                var games = await repository.GetGamesAsync();
+                return Results.Ok(games.Select(game => game?.AsDto()));
         });
 
         // Get game by ID

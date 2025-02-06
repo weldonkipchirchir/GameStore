@@ -1,8 +1,12 @@
+using System.Diagnostics;
 using System.Text;
+using System.Threading.RateLimiting;
 using GameStore.Api.Data;
 using GameStore.Api.Endpoints;
 using GameStore.Api.Entities;
 using GameStore.Api.Authorization;
+using GameStore.Api.Dtos.ErrorHandling;
+using GameStore.Api.Dtos.Middleware;
 using GameStore.Api.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +23,9 @@ builder.Services.AddJwtBearerAuthentication(builder.Configuration);
 
 builder.Services.AddAuthorizationPolicies();
 
+builder.Services.RateLimiterMiddleware();
+
+//builder.Services.AddTransient<ExceptionsMiddleware>();
 builder.Services.AddHttpLogging(options =>
 {
     // Optional: Configure logging options here
@@ -31,6 +38,10 @@ var app = builder.Build();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExceptionHandling());
+
+//app.UseMiddleware<ExceptionsMiddleware>();
 
 // Initialize database and map endpoints
 await app.Services.InitializeDatabaseAsync();

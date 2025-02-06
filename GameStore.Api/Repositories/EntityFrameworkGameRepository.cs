@@ -17,12 +17,12 @@ public class EntityFrameworkGameRepository : IGameRepository
 
     public async Task<IEnumerable<Game?>> GetGamesAsync()
     {
-        return await dbContext.Games.AsNoTracking().ToListAsync();
+        return await _context.Games.AsNoTracking().ToListAsync();
     }
 
     public async Task<Game?> GetGameAsync(int id)
     {
-        return await dbContext.Games.FindAsync(id);
+        return await _context.Games.FindAsync(id);
     }
 
     public async Task CreateGameAsync(Game game)
