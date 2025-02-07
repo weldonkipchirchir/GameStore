@@ -4,16 +4,9 @@ using GameStore.Api.Entities;
 
 namespace GameStore.Api.Repositories;
 
-public class EntityFrameworkGameRepository : IGameRepository
+public class EntityFrameworkGameRepository(GameStoreContext dbContext) : IGameRepository
 {
-    private readonly GameStoreContext dbContext;
-    private readonly ILogger<EntityFrameworkGameRepository> logger;
-
-    public EntityFrameworkGameRepository(GameStoreContext dbContext, ILogger<EntityFrameworkGameRepository> logger)
-    {
-        this.dbContext = dbContext;
-        this.logger = logger;
-    }
+    private readonly GameStoreContext _context = dbContext;
 
     public async Task<IEnumerable<Game?>> GetGamesAsync()
     {
@@ -28,21 +21,19 @@ public class EntityFrameworkGameRepository : IGameRepository
     public async Task CreateGameAsync(Game game)
     {
         game.ReleaseDate = DateTime.SpecifyKind(game.ReleaseDate, DateTimeKind.Utc);
-        dbContext.Games.Add(game);
-        await dbContext.SaveChangesAsync();
-
-        logger.LogInformation("Game with id {Id} was created", game.Id);
+        _context.Games.Add(game);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateGameAsync(int id, Game updatedGame)
     {
-        dbContext.Games.Update(updatedGame);
-        await dbContext.SaveChangesAsync();
+        _context.Games.Update(updatedGame);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteGameAsync(int id)
     {
-        dbContext.Games.Where(game => game.Id == id).ExecuteDelete();
-        await dbContext.SaveChangesAsync();
+        _context.Games.Where(game => game.Id == id).ExecuteDelete();
+        await _context.SaveChangesAsync();
     }
 }
