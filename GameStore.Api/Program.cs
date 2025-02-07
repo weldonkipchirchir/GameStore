@@ -11,6 +11,7 @@ using GameStore.Api.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,10 @@ builder.Services.AddAuthorizationPolicies();
 builder.Services.RateLimiterMiddleware();
 
 //builder.Services.AddTransient<ExceptionsMiddleware>();
+builder.Services.AddHttpLogging(options =>
+{
+    // Optional: Configure logging options here
+});
 
 // Build the application
 var app = builder.Build();
@@ -40,6 +45,8 @@ app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExce
 
 // Initialize database and map endpoints
 await app.Services.InitializeDatabaseAsync();
+
+app.UseHttpLogging();
 
 app.MapGamesEndpoints();
 

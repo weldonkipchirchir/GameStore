@@ -10,6 +10,10 @@ namespace GameStore.Api.Data
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<GameStoreContext>();
             await context.Database.MigrateAsync();
+
+            var logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Db Initializer");
+            logger.LogInformation(5, "Database is ready");
+
         }
 
         public static IServiceCollection AddRepositoryServices(this IServiceCollection services, IConfiguration config)
