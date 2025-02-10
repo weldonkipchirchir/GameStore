@@ -6,34 +6,34 @@ namespace GameStore.Api.Repositories;
 
 public class EntityFrameworkGameRepository(GameStoreContext dbContext) : IGameRepository
 {
-    private readonly GameStoreContext _context = dbContext;
+    private readonly GameStoreContext dbContext = dbContext;
 
     public async Task<IEnumerable<Game?>> GetGamesAsync()
     {
-        return await _context.Games.AsNoTracking().ToListAsync();
+        return await dbContext.Games.AsNoTracking().ToListAsync();
     }
 
     public async Task<Game?> GetGameAsync(int id)
     {
-        return await _context.Games.FindAsync(id);
+        return await dbContext.Games.FindAsync(id);
     }
 
     public async Task CreateGameAsync(Game game)
     {
         game.ReleaseDate = DateTime.SpecifyKind(game.ReleaseDate, DateTimeKind.Utc);
-        _context.Games.Add(game);
-        await _context.SaveChangesAsync();
+        dbContext.Games.Add(game);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateGameAsync(int id, Game updatedGame)
     {
-        _context.Games.Update(updatedGame);
-        await _context.SaveChangesAsync();
+        dbContext.Games.Update(updatedGame);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteGameAsync(int id)
     {
-        _context.Games.Where(game => game.Id == id).ExecuteDelete();
-        await _context.SaveChangesAsync();
+        dbContext.Games.Where(game => game.Id == id).ExecuteDelete();
+        await dbContext.SaveChangesAsync();
     }
 }
