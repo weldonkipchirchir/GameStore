@@ -25,6 +25,14 @@ builder.Services.AddAuthorizationPolicies();
 
 builder.Services.RateLimiterMiddleware();
 
+// Add API versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
+
 //builder.Services.AddTransient<ExceptionsMiddleware>();
 builder.Services.AddHttpLogging(options =>
 {
