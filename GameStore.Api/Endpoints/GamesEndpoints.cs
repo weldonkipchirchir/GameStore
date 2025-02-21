@@ -61,7 +61,7 @@ public static class GamesEndpoints
                 Genre = gameDto.Genre,
                 Price = gameDto.Price,
                 ReleaseDate = gameDto.ReleaseDate,
-                ImageUrl = gameDto.ImageUrl
+                ImageUri = gameDto.ImageUri
             };
 
             await repository.CreateGameAsync(game);
@@ -78,7 +78,7 @@ public static class GamesEndpoints
             game.Genre = updatedGameDto.Genre;
             game.Price = updatedGameDto.Price;
             game.ReleaseDate = updatedGameDto.ReleaseDate;
-            game.ImageUrl = updatedGameDto.ImageUrl;
+            game.ImageUri = updatedGameDto.ImageUri;
 
             await repository.UpdateGameAsync(id, game);
 
