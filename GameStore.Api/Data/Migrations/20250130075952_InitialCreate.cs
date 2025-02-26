@@ -22,7 +22,7 @@ namespace GameStore.Api.Data.Migrations
                     Genre = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ImageUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    ImageUri = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

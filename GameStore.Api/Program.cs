@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using GameStore.Api.cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,16 @@ builder.Services.AddJwtBearerAuthentication(builder.Configuration);
 builder.Services.AddAuthorizationPolicies();
 
 builder.Services.RateLimiterMiddleware();
+
+// Add API versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new(1.0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
+
+builder.Services.AddGameCors(builder.Configuration);
 
 //builder.Services.AddTransient<ExceptionsMiddleware>();
 builder.Services.AddHttpLogging(options =>
@@ -49,5 +60,7 @@ await app.Services.InitializeDatabaseAsync();
 app.UseHttpLogging();
 
 app.MapGamesEndpoints();
+
+app.UseCors();
 
 await app.RunAsync();

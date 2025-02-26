@@ -9,17 +9,17 @@ public class InMemGameRepository : IGameRepository
       new()
     {
         Id = 1, Name = "Street Fighter II", Genre = "Fighting", Price = 19.99M,
-        ReleaseDate = new(1991, 02, 01, 0, 0, 0, DateTimeKind.Utc), ImageUrl = "https://placehold.co/100"
+        ReleaseDate = new(1991, 02, 01, 0, 0, 0, DateTimeKind.Utc), ImageUri = "https://placehold.co/100"
     },
     new()
     {
         Id = 2, Name = "Fantasy XIV", Genre = "RolePlaying", Price = 59.99M,
-        ReleaseDate = new(2010, 09, 30, 0, 0, 0, DateTimeKind.Utc), ImageUrl = "https://placehold.co/100"
+        ReleaseDate = new(2010, 09, 30, 0, 0, 0, DateTimeKind.Utc), ImageUri = "https://placehold.co/100"
     },
     new()
     {
         Id = 3, Name = "FIFA 23", Genre = "Sports", Price = 69.99M,
-        ReleaseDate = new(2022, 09, 27, 0, 0, 0, DateTimeKind.Utc), ImageUrl = "https://placehold.co/100"
+        ReleaseDate = new(2022, 09, 27, 0, 0, 0, DateTimeKind.Utc), ImageUri = "https://placehold.co/100"
     }
   ];
 
@@ -49,7 +49,7 @@ public class InMemGameRepository : IGameRepository
         existingGame.Genre = updatedGame.Genre;
         existingGame.ReleaseDate = updatedGame.ReleaseDate;
         existingGame.Price = updatedGame.Price;
-        existingGame.ImageUrl = updatedGame.ImageUrl;
+        existingGame.ImageUri = updatedGame.ImageUri;
 
         return Task.CompletedTask;
     }
