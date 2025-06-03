@@ -8,9 +8,14 @@ public class EntityFrameworkGameRepository(GameStoreContext dbContext) : IGameRe
 {
     private readonly GameStoreContext dbContext = dbContext;
 
-    public async Task<IEnumerable<Game?>> GetGamesAsync()
+    public async Task<IEnumerable<Game?>> GetGamesAsync(int pageNumber, int pageSize, string? filter)
     {
-        return await dbContext.Games.AsNoTracking().ToListAsync();
+        return await FilterGames(filter)
+           .OrderBy(game => game.Id)
+           .Skip((pageNumber - 1) * pageSize)
+           .Take(pageSize)
+           .AsNoTracking()
+           .ToListAsync();
     }
 
     public async Task<Game?> GetGameAsync(int id)
@@ -35,5 +40,21 @@ public class EntityFrameworkGameRepository(GameStoreContext dbContext) : IGameRe
     {
         dbContext.Games.Where(game => game.Id == id).ExecuteDelete();
         await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<int> CountAsync(string? filter)
+    {
+        return await FilterGames(filter).CountAsync();
+    }
+
+    private IQueryable<Game> FilterGames(string? filter)
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+        {
+            return dbContext.Games;
+        }
+
+        return dbContext.Games.Where(game => game.Name.Contains(filter) ||
+                                             game.Genre.Contains(filter));
     }
 }

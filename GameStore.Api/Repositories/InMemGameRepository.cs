@@ -20,12 +20,40 @@ public class InMemGameRepository : IGameRepository
     {
         Id = 3, Name = "FIFA 23", Genre = "Sports", Price = 69.99M,
         ReleaseDate = new(2022, 09, 27, 0, 0, 0, DateTimeKind.Utc), ImageUri = "https://placehold.co/100"
-    }
+        }
   ];
 
 
-    public Task<IEnumerable<Game?>> GetGamesAsync() => Task.FromResult(games.AsEnumerable());
+    public Task<IEnumerable<Game?>> GetGamesAsync(int pageNumber, int pageSize, string? filter)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(pageNumber);
+        ArgumentOutOfRangeException.ThrowIfNegative(pageSize);
 
+        var filteredGames = FilterGames(filter)
+            .OrderBy(game => game?.Id)
+            .AsEnumerable();
+
+        if (pageNumber <= 0 || pageSize <= 0)
+        {
+            return Task.FromResult(filteredGames);
+        }
+
+        return GetPaginatedGamesAsync(filteredGames, pageNumber, pageSize);
+    }
+    private Task<IEnumerable<Game?>> GetPaginatedGamesAsync(IEnumerable<Game?> games, int pageNumber, int pageSize)
+    {
+        if (pageNumber <= 0 || pageSize <= 0)
+        {
+            throw new ArgumentOutOfRangeException("Page number and page size must be greater than zero.");
+        }
+
+        var paginatedGames = games
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsEnumerable();
+
+        return Task.FromResult(paginatedGames);
+    }
     public Task<Game?> GetGameAsync(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(id);
@@ -63,4 +91,22 @@ public class InMemGameRepository : IGameRepository
         games.RemoveAt(existingGame);
         return Task.CompletedTask;
     }
+
+    public Task<int> CountAsync(string? filter)
+    {
+        {
+            return Task.FromResult(games.Count(game => game != null));
+        }
+    }
+
+    private IEnumerable<Game> FilterGames(string? filter)
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+        {
+            return games;
+        }
+
+        return games.Where(game => game != null && (game.Name.Contains(filter) || game.Genre.Contains(filter)));
+    }
+
 }

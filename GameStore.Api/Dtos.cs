@@ -36,3 +36,13 @@ public record UpdateGameDto(
     DateTime ReleaseDate,
     [Url][StringLength(100)] string ImageUri
 );
+
+public record GetGameDtov1(
+    int PageNumber = 1,
+    int PageSize = 5
+);
+
+public record GetGameDtov2(
+    int PageNumber = 1,
+    int PageSize = 5
+);
