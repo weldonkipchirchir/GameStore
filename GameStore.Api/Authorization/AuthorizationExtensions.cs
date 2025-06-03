@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -7,12 +8,17 @@ public static class AuthorizationExtensions
 {
     public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
     {
-        services.AddAuthorization(options =>
+        services
+            .AddScoped<IClaimsTransformation, ScopeTransformation>()    
+            .AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.ReadAccess, policy =>
-                policy.RequireClaim("scope", "games:read"));
+            options.AddPolicy(Policies.ReadAccess, builder =>
+                builder.RequireClaim("scope", "games:read")
+                    .AddAuthenticationSchemes("Auth0"));
+            
             options.AddPolicy(Policies.WriteAccess, policy =>
-                policy.RequireClaim("scope", "games:write").RequireRole("Admin"));
+                policy.RequireClaim("scope", "games:write").RequireRole("Admin")
+                .AddAuthenticationSchemes("Auth0"));
         });
 
         return services;
@@ -23,13 +29,16 @@ public static class AuthorizationExtensions
         var jwtSettings = config.GetSection("Jwt").Get<JwtSettings>()
             ?? throw new InvalidOperationException("JWT settings are not properly configured in appsettings.json");
 
+        var auth0Settings = config.GetSection("Authentication:Schemes:Auth0").Get<Auth0Settings>()
+                            ?? throw new InvalidOperationException("Auth0 settings are not properly configured in appsettings.json");
+        
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
         })
-        .AddJwtBearer(options =>
+     	.AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -58,6 +67,18 @@ public static class AuthorizationExtensions
                 {
                     return Task.CompletedTask;
                 }
+            };
+        })
+        .AddJwtBearer("Auth0", options =>
+        {
+            options.Authority = auth0Settings.Authority;
+            options.Audience = auth0Settings.ValidAudiences?.FirstOrDefault() ?? "https://gamestore";
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = false
             };
         });
 

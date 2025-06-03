@@ -14,7 +14,8 @@ namespace GameStore.Api.cors
                     var allowedOrigin = configuration[allowedOriginSetting] ?? throw new InvalidOperationException("AllowedOrigin is not set");
                     corsBuilder.WithOrigins(allowedOrigin)
                     .AllowAnyHeader()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Pagination");
                 });
             }
         );
